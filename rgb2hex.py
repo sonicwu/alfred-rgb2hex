@@ -5,7 +5,7 @@ from png import png
 from workflow import Workflow
 
 
-icon_folder = 'generated_icons'
+icon_folder = 'generated-icons'
 
 
 def main(wf):
