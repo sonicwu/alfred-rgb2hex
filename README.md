@@ -3,7 +3,7 @@ Alfred workflow to convert RGB values of a color to a hexadecimal string, and co
 
 ## Download
 
-You can download the workflow file from `release` folder.
+You can download the workflow file from the [releases](./releases) page.
 
 ## Example
 
