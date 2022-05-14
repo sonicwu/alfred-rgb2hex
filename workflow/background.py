@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+#!/usr/bin/env python
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 # encoding: utf-8
 #
 # Copyright (c) 2014 deanishe@deanishe.net
@@ -16,6 +20,7 @@ See :ref:`the User Manual <background-processes>` for more information
 and examples.
 """
 
+<<<<<<< HEAD
 
 import os
 import pickle
@@ -26,6 +31,19 @@ import sys
 from workflow import Workflow
 
 __all__ = ["is_running", "run_in_background"]
+=======
+from __future__ import print_function, unicode_literals
+
+import signal
+import sys
+import os
+import subprocess
+import pickle
+
+from workflow import Workflow
+
+__all__ = ['is_running', 'run_in_background']
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
 _wf = None
 
@@ -50,7 +68,11 @@ def _arg_cache(name):
     :rtype: ``unicode`` filepath
 
     """
+<<<<<<< HEAD
     return wf().cachefile(name + ".argcache")
+=======
+    return wf().cachefile(name + '.argcache')
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
 
 def _pid_file(name):
@@ -62,7 +84,11 @@ def _pid_file(name):
     :rtype: ``unicode`` filepath
 
     """
+<<<<<<< HEAD
     return wf().cachefile(name + ".pid")
+=======
+    return wf().cachefile(name + '.pid')
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
 
 def _process_exists(pid):
@@ -94,16 +120,28 @@ def _job_pid(name):
     if not os.path.exists(pidfile):
         return
 
+<<<<<<< HEAD
     with open(pidfile, "rb") as fp:
         read = fp.read()
         # print(str(read))
         pid = int.from_bytes(read, sys.byteorder)
         # print(pid)
+=======
+    with open(pidfile, 'rb') as fp:
+        pid = int(fp.read())
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
         if _process_exists(pid):
             return pid
 
+<<<<<<< HEAD
     os.unlink(pidfile)
+=======
+    try:
+        os.unlink(pidfile)
+    except Exception:  # pragma: no cover
+        pass
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
 
 def is_running(name):
@@ -121,9 +159,14 @@ def is_running(name):
     return False
 
 
+<<<<<<< HEAD
 def _background(
     pidfile, stdin="/dev/null", stdout="/dev/null", stderr="/dev/null"
 ):  # pragma: no cover
+=======
+def _background(pidfile, stdin='/dev/null', stdout='/dev/null',
+                stderr='/dev/null'):  # pragma: no cover
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
     """Fork the current process into a background daemon.
 
     :param pidfile: file to write PID of daemon process to.
@@ -136,31 +179,49 @@ def _background(
     :type stderr: filepath
 
     """
+<<<<<<< HEAD
 
+=======
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
     def _fork_and_exit_parent(errmsg, wait=False, write=False):
         try:
             pid = os.fork()
             if pid > 0:
                 if write:  # write PID of child process to `pidfile`
+<<<<<<< HEAD
                     tmp = pidfile + ".tmp"
                     with open(tmp, "wb") as fp:
                         fp.write(pid.to_bytes(4, sys.byteorder))
+=======
+                    tmp = pidfile + '.tmp'
+                    with open(tmp, 'wb') as fp:
+                        fp.write(str(pid))
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
                     os.rename(tmp, pidfile)
                 if wait:  # wait for child process to exit
                     os.waitpid(pid, 0)
                 os._exit(0)
         except OSError as err:
+<<<<<<< HEAD
             _log().critical("%s: (%d) %s", errmsg, err.errno, err.strerror)
             raise err
 
     # Do first fork and wait for second fork to finish.
     _fork_and_exit_parent("fork #1 failed", wait=True)
+=======
+            _log().critical('%s: (%d) %s', errmsg, err.errno, err.strerror)
+            raise err
+
+    # Do first fork and wait for second fork to finish.
+    _fork_and_exit_parent('fork #1 failed', wait=True)
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
     # Decouple from parent environment.
     os.chdir(wf().workflowdir)
     os.setsid()
 
     # Do second fork and write PID to pidfile.
+<<<<<<< HEAD
     _fork_and_exit_parent("fork #2 failed", write=True)
 
     # Now I am a daemon!
@@ -173,6 +234,20 @@ def _background(
     if hasattr(sys.stdout, "fileno"):
         os.dup2(so.fileno(), sys.stdout.fileno())
     if hasattr(sys.stderr, "fileno"):
+=======
+    _fork_and_exit_parent('fork #2 failed', write=True)
+
+    # Now I am a daemon!
+    # Redirect standard file descriptors.
+    si = open(stdin, 'r', 0)
+    so = open(stdout, 'a+', 0)
+    se = open(stderr, 'a+', 0)
+    if hasattr(sys.stdin, 'fileno'):
+        os.dup2(si.fileno(), sys.stdin.fileno())
+    if hasattr(sys.stdout, 'fileno'):
+        os.dup2(so.fileno(), sys.stdout.fileno())
+    if hasattr(sys.stderr, 'fileno'):
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
         os.dup2(se.fileno(), sys.stderr.fileno())
 
 
@@ -222,12 +297,17 @@ def run_in_background(name, args, **kwargs):
 
     """
     if is_running(name):
+<<<<<<< HEAD
         _log().info("[%s] job already running", name)
+=======
+        _log().info('[%s] job already running', name)
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
         return
 
     argcache = _arg_cache(name)
 
     # Cache arguments
+<<<<<<< HEAD
     with open(argcache, "wb") as fp:
         pickle.dump({"args": args, "kwargs": kwargs}, fp)
         _log().debug("[%s] command cached: %s", name, argcache)
@@ -241,6 +321,21 @@ def run_in_background(name, args, **kwargs):
         _log().error("[%s] background runner failed with %d", name, retcode)
     else:
         _log().debug("[%s] background job started", name)
+=======
+    with open(argcache, 'wb') as fp:
+        pickle.dump({'args': args, 'kwargs': kwargs}, fp)
+        _log().debug('[%s] command cached: %s', name, argcache)
+
+    # Call this script
+    cmd = ['/usr/bin/python', __file__, name]
+    _log().debug('[%s] passing job to background runner: %r', name, cmd)
+    retcode = subprocess.call(cmd)
+
+    if retcode:  # pragma: no cover
+        _log().error('[%s] background runner failed with %d', name, retcode)
+    else:
+        _log().debug('[%s] background job started', name)
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
     return retcode
 
@@ -256,7 +351,11 @@ def main(wf):  # pragma: no cover
     name = wf.args[0]
     argcache = _arg_cache(name)
     if not os.path.exists(argcache):
+<<<<<<< HEAD
         msg = "[{0}] command cache not found: {1}".format(name, argcache)
+=======
+        msg = '[{0}] command cache not found: {1}'.format(name, argcache)
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
         log.critical(msg)
         raise IOError(msg)
 
@@ -265,23 +364,37 @@ def main(wf):  # pragma: no cover
     _background(pidfile)
 
     # Load cached arguments
+<<<<<<< HEAD
     with open(argcache, "rb") as fp:
         data = pickle.load(fp)
 
     # Cached arguments
     args = data["args"]
     kwargs = data["kwargs"]
+=======
+    with open(argcache, 'rb') as fp:
+        data = pickle.load(fp)
+
+    # Cached arguments
+    args = data['args']
+    kwargs = data['kwargs']
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
     # Delete argument cache file
     os.unlink(argcache)
 
     try:
         # Run the command
+<<<<<<< HEAD
         log.debug("[%s] running command: %r", name, args)
+=======
+        log.debug('[%s] running command: %r', name, args)
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
         retcode = subprocess.call(args, **kwargs)
 
         if retcode:
+<<<<<<< HEAD
             log.error("[%s] command failed with status %d", name, retcode)
     finally:
         os.unlink(pidfile)
@@ -290,4 +403,14 @@ def main(wf):  # pragma: no cover
 
 
 if __name__ == "__main__":  # pragma: no cover
+=======
+            log.error('[%s] command failed with status %d', name, retcode)
+    finally:
+        os.unlink(pidfile)
+
+    log.debug('[%s] job complete', name)
+
+
+if __name__ == '__main__':  # pragma: no cover
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
     wf().run(main)

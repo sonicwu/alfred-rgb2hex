@@ -3,7 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>bundleid</key>
-	<string></string>
+	<string>com.sonicwu.rgb2hex</string>
+	<key>category</key>
+	<string>Productivity</string>
 	<key>connections</key>
 	<dict>
 		<key>CB308760-026B-4A2C-9F40-756788C828F8</key>
@@ -15,8 +17,6 @@
 				<integer>0</integer>
 				<key>modifiersubtext</key>
 				<string></string>
-				<key>vitoclose</key>
-				<false/>
 			</dict>
 		</array>
 	</dict>
@@ -37,29 +37,17 @@
 				<false/>
 				<key>clipboardtext</key>
 				<string>{query}</string>
-				<key>ignoredynamicplaceholders</key>
-				<false/>
-				<key>transient</key>
-				<false/>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.output.clipboard</string>
 			<key>uid</key>
 			<string>50404BDB-8026-4FC9-B8BC-7C0B476C5FA3</string>
 			<key>version</key>
-			<integer>3</integer>
+			<integer>0</integer>
 		</dict>
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>alfredfiltersresults</key>
-				<false/>
-				<key>alfredfiltersresultsmatchmode</key>
-				<integer>0</integer>
-				<key>argumenttreatemptyqueryasnil</key>
-				<false/>
-				<key>argumenttrimmode</key>
-				<integer>0</integer>
 				<key>argumenttype</key>
 				<integer>0</integer>
 				<key>escaping</key>
@@ -77,11 +65,7 @@
 				<key>runningsubtext</key>
 				<string>Please Wait...</string>
 				<key>script</key>
-				<string>python3 rgb2hex.py "{query}"</string>
-				<key>scriptargtype</key>
-				<integer>0</integer>
-				<key>scriptfile</key>
-				<string></string>
+				<string>python rgb2hex.py "{query}"</string>
 				<key>subtext</key>
 				<string>Convert RGB values of a color to a hexadecimal string</string>
 				<key>title</key>
@@ -96,32 +80,24 @@
 			<key>uid</key>
 			<string>CB308760-026B-4A2C-9F40-756788C828F8</string>
 			<key>version</key>
-			<integer>3</integer>
+			<integer>0</integer>
 		</dict>
 	</array>
 	<key>readme</key>
-	<string>Convert RGB values of a color to a hexadecimal string</string>
+	<string></string>
 	<key>uidata</key>
 	<dict>
 		<key>50404BDB-8026-4FC9-B8BC-7C0B476C5FA3</key>
 		<dict>
-			<key>xpos</key>
-			<integer>665</integer>
 			<key>ypos</key>
-			<integer>160</integer>
+			<real>10</real>
 		</dict>
 		<key>CB308760-026B-4A2C-9F40-756788C828F8</key>
 		<dict>
-			<key>xpos</key>
-			<integer>185</integer>
 			<key>ypos</key>
-			<integer>160</integer>
+			<real>10</real>
 		</dict>
 	</dict>
-	<key>variablesdontexport</key>
-	<array/>
-	<key>version</key>
-	<string>2.0.0</string>
 	<key>webaddress</key>
 	<string>https://github.com/sonicwu/alfred-rgb2hex</string>
 </dict>

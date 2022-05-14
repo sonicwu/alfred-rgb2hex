@@ -23,6 +23,10 @@ directory. It replaces the application's icon with your workflow's
 icon and then calls the application to post notifications.
 """
 
+<<<<<<< HEAD
+=======
+from __future__ import print_function, unicode_literals
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
 import os
 import plistlib
@@ -32,9 +36,15 @@ import sys
 import tarfile
 import tempfile
 import uuid
+<<<<<<< HEAD
 from typing import List
 
 from . import workflow
+=======
+
+import workflow
+
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
 _wf = None
 _log = None
@@ -42,6 +52,7 @@ _log = None
 
 #: Available system sounds from System Preferences > Sound > Sound Effects
 SOUNDS = (
+<<<<<<< HEAD
     "Basso",
     "Blow",
     "Bottle",
@@ -56,6 +67,22 @@ SOUNDS = (
     "Sosumi",
     "Submarine",
     "Tink",
+=======
+    'Basso',
+    'Blow',
+    'Bottle',
+    'Frog',
+    'Funk',
+    'Glass',
+    'Hero',
+    'Morse',
+    'Ping',
+    'Pop',
+    'Purr',
+    'Sosumi',
+    'Submarine',
+    'Tink',
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 )
 
 
@@ -89,7 +116,11 @@ def notifier_program():
     Returns:
         unicode: Path to Notify.app ``applet`` executable.
     """
+<<<<<<< HEAD
     return wf().datafile("Notify.app/Contents/MacOS/applet")
+=======
+    return wf().datafile('Notify.app/Contents/MacOS/applet')
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
 
 def notifier_icon_path():
@@ -98,7 +129,11 @@ def notifier_icon_path():
     Returns:
         unicode: Path to ``applet.icns`` within the app bundle.
     """
+<<<<<<< HEAD
     return wf().datafile("Notify.app/Contents/Resources/applet.icns")
+=======
+    return wf().datafile('Notify.app/Contents/Resources/applet.icns')
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
 
 def install_notifier():
@@ -107,6 +142,7 @@ def install_notifier():
     Changes the bundle ID of the installed app and gives it the
     workflow's icon.
     """
+<<<<<<< HEAD
     archive = os.path.join(os.path.dirname(__file__), "Notify.tgz")
     destdir = wf().datadir
     app_path = os.path.join(destdir, "Notify.app")
@@ -122,6 +158,23 @@ def install_notifier():
     # Replace applet icon
     icon = notifier_icon_path()
     workflow_icon = wf().workflowfile("icon.png")
+=======
+    archive = os.path.join(os.path.dirname(__file__), 'Notify.tgz')
+    destdir = wf().datadir
+    app_path = os.path.join(destdir, 'Notify.app')
+    n = notifier_program()
+    log().debug('installing Notify.app to %r ...', destdir)
+    # z = zipfile.ZipFile(archive, 'r')
+    # z.extractall(destdir)
+    tgz = tarfile.open(archive, 'r:gz')
+    tgz.extractall(destdir)
+    assert os.path.exists(n), \
+        'Notify.app could not be installed in %s' % destdir
+
+    # Replace applet icon
+    icon = notifier_icon_path()
+    workflow_icon = wf().workflowfile('icon.png')
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
     if os.path.exists(icon):
         os.unlink(icon)
 
@@ -133,7 +186,11 @@ def install_notifier():
     # until I figure out a better way of excluding this module
     # from coverage in py2.6.
     if sys.version_info >= (2, 7):  # pragma: no cover
+<<<<<<< HEAD
         from AppKit import NSImage, NSWorkspace
+=======
+        from AppKit import NSWorkspace, NSImage
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
         ws = NSWorkspace.sharedWorkspace()
         img = NSImage.alloc().init()
@@ -141,11 +198,19 @@ def install_notifier():
         ws.setIcon_forFile_options_(img, app_path, 0)
 
     # Change bundle ID of installed app
+<<<<<<< HEAD
     ip_path = os.path.join(app_path, "Contents/Info.plist")
     bundle_id = "{0}.{1}".format(wf().bundleid, uuid.uuid4().hex)
     data = plistlib.readPlist(ip_path)
     log().debug("changing bundle ID to %r", bundle_id)
     data["CFBundleIdentifier"] = bundle_id
+=======
+    ip_path = os.path.join(app_path, 'Contents/Info.plist')
+    bundle_id = '{0}.{1}'.format(wf().bundleid, uuid.uuid4().hex)
+    data = plistlib.readPlist(ip_path)
+    log().debug('changing bundle ID to %r', bundle_id)
+    data['CFBundleIdentifier'] = bundle_id
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
     plistlib.writePlist(data, ip_path)
 
 
@@ -171,7 +236,11 @@ def validate_sound(sound):
     return None
 
 
+<<<<<<< HEAD
 def notify(title="", text="", sound=None):
+=======
+def notify(title='', text='', sound=None):
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
     """Post notification via Notify.app helper.
 
     Args:
@@ -185,10 +254,17 @@ def notify(title="", text="", sound=None):
     Returns:
         bool: ``True`` if notification was posted, else ``False``.
     """
+<<<<<<< HEAD
     if title == text == "":
         raise ValueError("Empty notification")
 
     sound = validate_sound(sound) or ""
+=======
+    if title == text == '':
+        raise ValueError('Empty notification')
+
+    sound = validate_sound(sound) or ''
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
     n = notifier_program()
 
@@ -196,15 +272,23 @@ def notify(title="", text="", sound=None):
         install_notifier()
 
     env = os.environ.copy()
+<<<<<<< HEAD
     enc = "utf-8"
     env["NOTIFY_TITLE"] = title.encode(enc)
     env["NOTIFY_MESSAGE"] = text.encode(enc)
     env["NOTIFY_SOUND"] = sound.encode(enc)
+=======
+    enc = 'utf-8'
+    env['NOTIFY_TITLE'] = title.encode(enc)
+    env['NOTIFY_MESSAGE'] = text.encode(enc)
+    env['NOTIFY_SOUND'] = sound.encode(enc)
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
     cmd = [n]
     retcode = subprocess.call(cmd, env=env)
     if retcode == 0:
         return True
 
+<<<<<<< HEAD
     log().error("Notify.app exited with status {0}.".format(retcode))
     return False
 
@@ -213,6 +297,12 @@ def usr_bin_env(*args: str) -> List[str]:
     return ["/usr/bin/env", f'PATH={os.environ["PATH"]}'] + list(args)
 
 
+=======
+    log().error('Notify.app exited with status {0}.'.format(retcode))
+    return False
+
+
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 def convert_image(inpath, outpath, size):
     """Convert an image file using ``sips``.
 
@@ -224,6 +314,7 @@ def convert_image(inpath, outpath, size):
     Raises:
         RuntimeError: Raised if ``sips`` exits with non-zero status.
     """
+<<<<<<< HEAD
     cmd = ["sips", "-z", str(size), str(size), inpath, "--out", outpath]
     # log().debug(cmd)
     with open(os.devnull, "w") as pipe:
@@ -233,6 +324,19 @@ def convert_image(inpath, outpath, size):
 
     if retcode != 0:
         raise RuntimeError("sips exited with %d" % retcode)
+=======
+    cmd = [
+        b'sips',
+        b'-z', str(size), str(size),
+        inpath,
+        b'--out', outpath]
+    # log().debug(cmd)
+    with open(os.devnull, 'w') as pipe:
+        retcode = subprocess.call(cmd, stdout=pipe, stderr=subprocess.STDOUT)
+
+    if retcode != 0:
+        raise RuntimeError('sips exited with %d' % retcode)
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
 
 def png_to_icns(png_path, icns_path):
@@ -249,6 +353,7 @@ def png_to_icns(png_path, icns_path):
     Raises:
         RuntimeError: Raised if ``iconutil`` or ``sips`` fail.
     """
+<<<<<<< HEAD
     tempdir = tempfile.mkdtemp(prefix="aw-", dir=wf().datadir)
 
     try:
@@ -257,17 +362,34 @@ def png_to_icns(png_path, icns_path):
         if os.path.exists(iconset):  # pragma: nocover
             raise RuntimeError("iconset already exists: " + iconset)
 
+=======
+    tempdir = tempfile.mkdtemp(prefix='aw-', dir=wf().datadir)
+
+    try:
+        iconset = os.path.join(tempdir, 'Icon.iconset')
+
+        assert not os.path.exists(iconset), \
+            'iconset already exists: ' + iconset
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
         os.makedirs(iconset)
 
         # Copy source icon to icon set and generate all the other
         # sizes needed
         configs = []
         for i in (16, 32, 128, 256, 512):
+<<<<<<< HEAD
             configs.append(("icon_{0}x{0}.png".format(i), i))
             configs.append((("icon_{0}x{0}@2x.png".format(i), i * 2)))
 
         shutil.copy(png_path, os.path.join(iconset, "icon_256x256.png"))
         shutil.copy(png_path, os.path.join(iconset, "icon_128x128@2x.png"))
+=======
+            configs.append(('icon_{0}x{0}.png'.format(i), i))
+            configs.append((('icon_{0}x{0}@2x.png'.format(i), i * 2)))
+
+        shutil.copy(png_path, os.path.join(iconset, 'icon_256x256.png'))
+        shutil.copy(png_path, os.path.join(iconset, 'icon_128x128@2x.png'))
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
         for name, size in configs:
             outpath = os.path.join(iconset, name)
@@ -275,6 +397,7 @@ def png_to_icns(png_path, icns_path):
                 continue
             convert_image(png_path, outpath, size)
 
+<<<<<<< HEAD
         cmd = ["iconutil", "-c", "icns", "-o", icns_path, iconset]
 
         retcode = subprocess.call(cmd)
@@ -283,6 +406,20 @@ def png_to_icns(png_path, icns_path):
 
         if not os.path.exists(icns_path):  # pragma: nocover
             raise ValueError("generated ICNS file not found: " + repr(icns_path))
+=======
+        cmd = [
+            b'iconutil',
+            b'-c', b'icns',
+            b'-o', icns_path,
+            iconset]
+
+        retcode = subprocess.call(cmd)
+        if retcode != 0:
+            raise RuntimeError('iconset exited with %d' % retcode)
+
+        assert os.path.exists(icns_path), \
+            'generated ICNS file not found: ' + repr(icns_path)
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
     finally:
         try:
             shutil.rmtree(tempdir)
@@ -290,15 +427,24 @@ def png_to_icns(png_path, icns_path):
             pass
 
 
+<<<<<<< HEAD
 if __name__ == "__main__":  # pragma: nocover
+=======
+if __name__ == '__main__':  # pragma: nocover
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
     # Simple command-line script to test module with
     # This won't work on 2.6, as `argparse` isn't available
     # by default.
     import argparse
+<<<<<<< HEAD
+=======
+
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
     from unicodedata import normalize
 
     def ustr(s):
         """Coerce `s` to normalised Unicode."""
+<<<<<<< HEAD
         return normalize("NFD", s.decode("utf-8"))
 
     p = argparse.ArgumentParser()
@@ -313,6 +459,21 @@ if __name__ == "__main__":  # pragma: nocover
     p.add_argument(
         "text", type=ustr, help="Notification body text.", default="", nargs="?"
     )
+=======
+        return normalize('NFD', s.decode('utf-8'))
+
+    p = argparse.ArgumentParser()
+    p.add_argument('-p', '--png', help="PNG image to convert to ICNS.")
+    p.add_argument('-l', '--list-sounds', help="Show available sounds.",
+                   action='store_true')
+    p.add_argument('-t', '--title',
+                   help="Notification title.", type=ustr,
+                   default='')
+    p.add_argument('-s', '--sound', type=ustr,
+                   help="Optional notification sound.", default='')
+    p.add_argument('text', type=ustr,
+                   help="Notification body text.", default='', nargs='?')
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
     o = p.parse_args()
 
     # List available sounds
@@ -325,6 +486,7 @@ if __name__ == "__main__":  # pragma: nocover
     if o.png:
         icns = os.path.join(
             os.path.dirname(o.png),
+<<<<<<< HEAD
             os.path.splitext(os.path.basename(o.png))[0] + ".icns",
         )
 
@@ -332,13 +494,27 @@ if __name__ == "__main__":  # pragma: nocover
 
         if os.path.exists(icns):
             raise ValueError("destination file already exists: " + icns)
+=======
+            os.path.splitext(os.path.basename(o.png))[0] + '.icns')
+
+        print('converting {0!r} to {1!r} ...'.format(o.png, icns),
+              file=sys.stderr)
+
+        assert not os.path.exists(icns), \
+            'destination file already exists: ' + icns
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
         png_to_icns(o.png, icns)
         sys.exit(0)
 
     # Post notification
+<<<<<<< HEAD
     if o.title == o.text == "":
         print("ERROR: empty notification.", file=sys.stderr)
+=======
+    if o.title == o.text == '':
+        print('ERROR: empty notification.', file=sys.stderr)
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
         sys.exit(1)
     else:
         notify(o.title, o.text, o.sound)
