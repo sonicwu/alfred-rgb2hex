@@ -10,11 +10,16 @@
 
 """A selection of helper functions useful for building workflows."""
 
+<<<<<<< HEAD
+
+import atexit
+=======
 from __future__ import print_function, absolute_import
 
 import atexit
 from collections import namedtuple
 from contextlib import contextmanager
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 import errno
 import fcntl
 import functools
@@ -23,8 +28,15 @@ import os
 import signal
 import subprocess
 import sys
+<<<<<<< HEAD
+import time
+from collections import namedtuple
+from contextlib import contextmanager
+from threading import Event
+=======
 from threading import Event
 import time
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
 # JXA scripts to call Alfred's API via the Scripting Bridge
 # {app} is automatically replaced with "Alfred 3" or
@@ -44,13 +56,22 @@ JXA_TRIGGER = "Application({app}).runTrigger({arg}, {opts});"
 JXA_SET_CONFIG = "Application({app}).setConfiguration({arg}, {opts});"
 # Delete a variable from the workflow configuration sheet/info.plist
 JXA_UNSET_CONFIG = "Application({app}).removeConfiguration({arg}, {opts});"
+<<<<<<< HEAD
+# Tell Alfred to reload a workflow from disk
+JXA_RELOAD_WORKFLOW = "Application({app}).reloadWorkflow({arg});"
+=======
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
 
 class AcquisitionError(Exception):
     """Raised if a lock cannot be acquired."""
 
 
+<<<<<<< HEAD
+AppInfo = namedtuple("AppInfo", ["name", "path", "bundleid"])
+=======
 AppInfo = namedtuple('AppInfo', ['name', 'path', 'bundleid'])
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 """Information about an installed application.
 
 Returned by :func:`appinfo`. All attributes are Unicode.
@@ -84,6 +105,16 @@ def jxa_app_name():
         unicode: Application name or ID.
 
     """
+<<<<<<< HEAD
+    if os.getenv("alfred_version", "").startswith("3"):
+        # Alfred 3
+        return "Alfred 3"
+    # Alfred 4+
+    return "com.runningwithcrayons.Alfred"
+
+
+def unicodify(s, encoding="utf-8", norm=None):
+=======
     if os.getenv('alfred_version', '').startswith('3'):
         # Alfred 3
         return u'Alfred 3'
@@ -92,6 +123,7 @@ def jxa_app_name():
 
 
 def unicodify(s, encoding='utf-8', norm=None):
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
     """Ensure string is Unicode.
 
     .. versionadded:: 1.31
@@ -108,11 +140,20 @@ def unicodify(s, encoding='utf-8', norm=None):
         unicode: Decoded, optionally normalised, Unicode string.
 
     """
+<<<<<<< HEAD
+    if not isinstance(s, str):
+        s = str(s, encoding)
+
+    if norm:
+        from unicodedata import normalize
+
+=======
     if not isinstance(s, unicode):
         s = unicode(s, encoding)
 
     if norm:
         from unicodedata import normalize
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
         s = normalize(norm, s)
 
     return s
@@ -136,8 +177,13 @@ def utf8ify(s):
     if isinstance(s, str):
         return s
 
+<<<<<<< HEAD
+    if isinstance(s, str):
+        return s.encode("utf-8")
+=======
     if isinstance(s, unicode):
         return s.encode('utf-8')
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
     return str(s)
 
@@ -148,20 +194,33 @@ def applescriptify(s):
     .. versionadded:: 1.31
 
     Replaces ``"`` with `"& quote &"`. Use this function if you want
+<<<<<<< HEAD
+    to insert a string into an AppleScript script:
+
+        >>> applescriptify('g "python" test')
+=======
 
     to insert a string into an AppleScript script:
         >>> query = 'g "python" test'
         >>> applescriptify(query)
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
         'g " & quote & "python" & quote & "test'
 
     Args:
         s (unicode): Unicode string to escape.
 
     Returns:
+<<<<<<< HEAD
+        unicode: Escaped string.
+
+    """
+    return s.replace('"', '" & quote & "')
+=======
         unicode: Escaped string
 
     """
     return s.replace(u'"', u'" & quote & "')
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
 
 def run_command(cmd, **kwargs):
@@ -173,6 +232,17 @@ def run_command(cmd, **kwargs):
     all arguments are encoded to UTF-8 first.
 
     Args:
+<<<<<<< HEAD
+        cmd (list): Command arguments to pass to :func:`~subprocess.check_output`.
+        **kwargs: Keyword arguments to pass to :func:`~subprocess.check_output`.
+
+    Returns:
+        str: Output returned by :func:`~subprocess.check_output`.
+
+    """
+    cmd = [str(s) for s in cmd]
+    return subprocess.check_output(cmd, **kwargs).decode()
+=======
         cmd (list): Command arguments to pass to ``check_output``.
         **kwargs: Keyword arguments to pass to ``check_output``.
 
@@ -182,6 +252,7 @@ def run_command(cmd, **kwargs):
     """
     cmd = [utf8ify(s) for s in cmd]
     return subprocess.check_output(cmd, **kwargs)
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
 
 def run_applescript(script, *args, **kwargs):
@@ -197,22 +268,39 @@ def run_applescript(script, *args, **kwargs):
         script (str, optional): Filepath of script or code to run.
         *args: Optional command-line arguments to pass to the script.
         **kwargs: Pass ``lang`` to run a language other than AppleScript.
+<<<<<<< HEAD
+            Any other keyword arguments are passed to :func:`run_command`.
+=======
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
     Returns:
         str: Output of run command.
 
     """
+<<<<<<< HEAD
+    lang = "AppleScript"
+    if "lang" in kwargs:
+        lang = kwargs["lang"]
+        del kwargs["lang"]
+
+    cmd = ["/usr/bin/osascript", "-l", lang]
+=======
     lang = 'AppleScript'
     if 'lang' in kwargs:
         lang = kwargs['lang']
         del kwargs['lang']
 
     cmd = ['/usr/bin/osascript', '-l', lang]
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
     if os.path.exists(script):
         cmd += [script]
     else:
+<<<<<<< HEAD
+        cmd += ["-e", script]
+=======
         cmd += ['-e', script]
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
     cmd.extend(args)
 
@@ -234,7 +322,11 @@ def run_jxa(script, *args):
         str: Output of script.
 
     """
+<<<<<<< HEAD
+    return run_applescript(script, *args, lang="JavaScript")
+=======
     return run_applescript(script, *args, lang='JavaScript')
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
 
 def run_trigger(name, bundleid=None, arg=None):
@@ -242,8 +334,13 @@ def run_trigger(name, bundleid=None, arg=None):
 
     .. versionadded:: 1.31
 
+<<<<<<< HEAD
+    If ``bundleid`` is not specified, the bundle ID of the calling
+    workflow is used.
+=======
     If ``bundleid`` is not specified, reads the bundle ID of the current
     workflow from Alfred's environment variables.
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
     Args:
         name (str): Name of External Trigger to call.
@@ -251,6 +348,35 @@ def run_trigger(name, bundleid=None, arg=None):
         arg (str, optional): Argument to pass to trigger.
 
     """
+<<<<<<< HEAD
+    bundleid = bundleid or os.getenv("alfred_workflow_bundleid")
+    appname = jxa_app_name()
+    opts = {"inWorkflow": bundleid}
+    if arg:
+        opts["withArgument"] = arg
+
+    script = JXA_TRIGGER.format(
+        app=json.dumps(appname),
+        arg=json.dumps(name),
+        opts=json.dumps(opts, sort_keys=True),
+    )
+
+    run_applescript(script, lang="JavaScript")
+
+
+def set_theme(theme_name):
+    """Change Alfred's theme.
+
+    .. versionadded:: 1.39.0
+
+    Args:
+        theme_name (unicode): Name of theme Alfred should use.
+
+    """
+    appname = jxa_app_name()
+    script = JXA_SET_THEME.format(app=json.dumps(appname), arg=json.dumps(theme_name))
+    run_applescript(script, lang="JavaScript")
+=======
     bundleid = bundleid or os.getenv('alfred_workflow_bundleid')
     appname = jxa_app_name()
     opts = {'inWorkflow': bundleid}
@@ -262,6 +388,7 @@ def run_trigger(name, bundleid=None, arg=None):
                                 opts=json.dumps(opts, sort_keys=True))
 
     run_applescript(script, lang='JavaScript')
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
 
 def set_config(name, value, bundleid=None, exportable=False):
@@ -269,6 +396,12 @@ def set_config(name, value, bundleid=None, exportable=False):
 
     .. versionadded:: 1.33
 
+<<<<<<< HEAD
+    If ``bundleid`` is not specified, the bundle ID of the calling
+    workflow is used.
+
+=======
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
     Args:
         name (str): Name of variable to set.
         value (str): Value to set variable to.
@@ -277,6 +410,19 @@ def set_config(name, value, bundleid=None, exportable=False):
             as exportable (Don't Export checkbox).
 
     """
+<<<<<<< HEAD
+    bundleid = bundleid or os.getenv("alfred_workflow_bundleid")
+    appname = jxa_app_name()
+    opts = {"toValue": value, "inWorkflow": bundleid, "exportable": exportable}
+
+    script = JXA_SET_CONFIG.format(
+        app=json.dumps(appname),
+        arg=json.dumps(name),
+        opts=json.dumps(opts, sort_keys=True),
+    )
+
+    run_applescript(script, lang="JavaScript")
+=======
     bundleid = bundleid or os.getenv('alfred_workflow_bundleid')
     appname = jxa_app_name()
     opts = {
@@ -290,6 +436,7 @@ def set_config(name, value, bundleid=None, exportable=False):
                                    opts=json.dumps(opts, sort_keys=True))
 
     run_applescript(script, lang='JavaScript')
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
 
 def unset_config(name, bundleid=None):
@@ -297,11 +444,96 @@ def unset_config(name, bundleid=None):
 
     .. versionadded:: 1.33
 
+<<<<<<< HEAD
+    If ``bundleid`` is not specified, the bundle ID of the calling
+    workflow is used.
+
+=======
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
     Args:
         name (str): Name of variable to delete.
         bundleid (str, optional): Bundle ID of workflow variable belongs to.
 
     """
+<<<<<<< HEAD
+    bundleid = bundleid or os.getenv("alfred_workflow_bundleid")
+    appname = jxa_app_name()
+    opts = {"inWorkflow": bundleid}
+
+    script = JXA_UNSET_CONFIG.format(
+        app=json.dumps(appname),
+        arg=json.dumps(name),
+        opts=json.dumps(opts, sort_keys=True),
+    )
+
+    run_applescript(script, lang="JavaScript")
+
+
+def search_in_alfred(query=None):
+    """Open Alfred with given search query.
+
+    .. versionadded:: 1.39.0
+
+    Omit ``query`` to simply open Alfred's main window.
+
+    Args:
+        query (unicode, optional): Search query.
+
+    """
+    query = query or ""
+    appname = jxa_app_name()
+    script = JXA_SEARCH.format(app=json.dumps(appname), arg=json.dumps(query))
+    run_applescript(script, lang="JavaScript")
+
+
+def browse_in_alfred(path):
+    """Open Alfred's filesystem navigation mode at ``path``.
+
+    .. versionadded:: 1.39.0
+
+    Args:
+        path (unicode): File or directory path.
+
+    """
+    appname = jxa_app_name()
+    script = JXA_BROWSE.format(app=json.dumps(appname), arg=json.dumps(path))
+    run_applescript(script, lang="JavaScript")
+
+
+def action_in_alfred(paths):
+    """Action the give filepaths in Alfred.
+
+    .. versionadded:: 1.39.0
+
+    Args:
+        paths (list): Unicode paths to files/directories to action.
+
+    """
+    appname = jxa_app_name()
+    script = JXA_ACTION.format(app=json.dumps(appname), arg=json.dumps(paths))
+    run_applescript(script, lang="JavaScript")
+
+
+def reload_workflow(bundleid=None):
+    """Tell Alfred to reload a workflow from disk.
+
+    .. versionadded:: 1.39.0
+
+    If ``bundleid`` is not specified, the bundle ID of the calling
+    workflow is used.
+
+    Args:
+        bundleid (unicode, optional): Bundle ID of workflow to reload.
+
+    """
+    bundleid = bundleid or os.getenv("alfred_workflow_bundleid")
+    appname = jxa_app_name()
+    script = JXA_RELOAD_WORKFLOW.format(
+        app=json.dumps(appname), arg=json.dumps(bundleid)
+    )
+
+    run_applescript(script, lang="JavaScript")
+=======
     bundleid = bundleid or os.getenv('alfred_workflow_bundleid')
     appname = jxa_app_name()
     opts = {'inWorkflow': bundleid}
@@ -311,6 +543,7 @@ def unset_config(name, bundleid=None):
                                      opts=json.dumps(opts, sort_keys=True))
 
     run_applescript(script, lang='JavaScript')
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
 
 def appinfo(name):
@@ -325,24 +558,48 @@ def appinfo(name):
         AppInfo: :class:`AppInfo` tuple or ``None`` if app isn't found.
 
     """
+<<<<<<< HEAD
+    cmd = [
+        "mdfind",
+        "-onlyin",
+        "/Applications",
+        "-onlyin",
+        "/System/Applications",
+        "-onlyin",
+        os.path.expanduser("~/Applications"),
+        "(kMDItemContentTypeTree == com.apple.application &&"
+        '(kMDItemDisplayName == "{0}" || kMDItemFSName == "{0}.app"))'.format(name),
+    ]
+=======
     cmd = ['mdfind', '-onlyin', '/Applications',
            '-onlyin', os.path.expanduser('~/Applications'),
            '(kMDItemContentTypeTree == com.apple.application &&'
            '(kMDItemDisplayName == "{0}" || kMDItemFSName == "{0}.app"))'
            .format(name)]
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
     output = run_command(cmd).strip()
     if not output:
         return None
 
+<<<<<<< HEAD
+    path = output.split("\n")[0]
+
+    cmd = ["mdls", "-raw", "-name", "kMDItemCFBundleIdentifier", path]
+=======
     path = output.split('\n')[0]
 
     cmd = ['mdls', '-raw', '-name', 'kMDItemCFBundleIdentifier', path]
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
     bid = run_command(cmd).strip()
     if not bid:  # pragma: no cover
         return None
 
+<<<<<<< HEAD
+    return AppInfo(name, path, bid)
+=======
     return AppInfo(unicodify(name), unicodify(path), unicodify(bid))
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
 
 @contextmanager
@@ -360,7 +617,11 @@ def atomic_writer(fpath, mode):
     :type mode: string
 
     """
+<<<<<<< HEAD
+    suffix = ".{}.tmp".format(os.getpid())
+=======
     suffix = '.{}.tmp'.format(os.getpid())
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
     temppath = fpath + suffix
     with open(temppath, mode) as fp:
         try:
@@ -369,7 +630,11 @@ def atomic_writer(fpath, mode):
         finally:
             try:
                 os.remove(temppath)
+<<<<<<< HEAD
+            except OSError:
+=======
             except (OSError, IOError):
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
                 pass
 
 
@@ -383,7 +648,11 @@ class LockFile(object):
 
     >>> path = '/path/to/file'
     >>> with LockFile(path):
+<<<<<<< HEAD
+    >>>     with open(path, 'w') as fp:
+=======
     >>>     with open(path, 'wb') as fp:
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
     >>>         fp.write(data)
 
     Args:
@@ -404,7 +673,11 @@ class LockFile(object):
 
     def __init__(self, protected_path, timeout=0.0, delay=0.05):
         """Create new :class:`LockFile` object."""
+<<<<<<< HEAD
+        self.lockfile = protected_path + ".lock"
+=======
         self.lockfile = protected_path + '.lock'
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
         self._lockfile = None
         self.timeout = timeout
         self.delay = delay
@@ -433,7 +706,11 @@ class LockFile(object):
         while True:
             # Raise error if we've been waiting too long to acquire the lock
             if self.timeout and (time.time() - start) >= self.timeout:
+<<<<<<< HEAD
+                raise AcquisitionError("lock acquisition timed out")
+=======
                 raise AcquisitionError('lock acquisition timed out')
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
             # If already locked, wait then try again
             if self.locked:
@@ -442,7 +719,11 @@ class LockFile(object):
 
             # Create in append mode so we don't lose any contents
             if self._lockfile is None:
+<<<<<<< HEAD
+                self._lockfile = open(self.lockfile, "a")
+=======
                 self._lockfile = open(self.lockfile, 'a')
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
             # Try to acquire the lock
             try:
@@ -476,10 +757,17 @@ class LockFile(object):
             self._lockfile = None
             try:
                 os.unlink(self.lockfile)
+<<<<<<< HEAD
+            except OSError:  # pragma: no cover
+                pass
+
+            return True  # noqa: B012
+=======
             except (IOError, OSError):  # pragma: no cover
                 pass
 
             return True
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
     def __enter__(self):
         """Acquire lock."""
@@ -516,7 +804,11 @@ class uninterruptible(object):
 
     """
 
+<<<<<<< HEAD
+    def __init__(self, func, class_name=""):
+=======
     def __init__(self, func, class_name=''):
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
         """Decorate `func`."""
         self.func = func
         functools.update_wrapper(self, func)
@@ -548,5 +840,9 @@ class uninterruptible(object):
 
     def __get__(self, obj=None, klass=None):
         """Decorator API."""
+<<<<<<< HEAD
+        return self.__class__(self.func.__get__(obj, klass), klass.__name__)
+=======
         return self.__class__(self.func.__get__(obj, klass),
                               klass.__name__)
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a

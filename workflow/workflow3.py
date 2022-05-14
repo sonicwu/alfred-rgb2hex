@@ -23,7 +23,10 @@ of them, and they won't be sent to Alfred when you call
 
 """
 
+<<<<<<< HEAD
+=======
 from __future__ import print_function, unicode_literals, absolute_import
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
 import json
 import os
@@ -50,12 +53,25 @@ class Variables(dict):
     information.
 
     Args:
+<<<<<<< HEAD
+        arg (unicode or list, optional): Main output/``{query}``.
+        **variables: Workflow variables to set.
+
+    In Alfred 4.1+ and Alfred-Workflow 1.40+, ``arg`` may also be a
+    :class:`list` or :class:`tuple`.
+
+    Attributes:
+        arg (unicode or list): Output value (``{query}``).
+            In Alfred 4.1+ and Alfred-Workflow 1.40+, ``arg`` may also be a
+            :class:`list` or :class:`tuple`.
+=======
         arg (unicode, optional): Main output/``{query}``.
         **variables: Workflow variables to set.
 
 
     Attributes:
         arg (unicode): Output value (``{query}``).
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
         config (dict): Configuration for downstream workflow element.
 
     """
@@ -68,6 +84,25 @@ class Variables(dict):
 
     @property
     def obj(self):
+<<<<<<< HEAD
+        """``alfredworkflow`` :class:`dict`."""
+        o = {}
+        if self:
+            d2 = {}
+            for k, v in list(self.items()):
+                d2[k] = v
+            o["variables"] = d2
+
+        if self.config:
+            o["config"] = self.config
+
+        if self.arg is not None:
+            o["arg"] = self.arg
+
+        return {"alfredworkflow": o}
+
+    def __str__(self):
+=======
         """Return ``alfredworkflow`` `dict`."""
         o = {}
         if self:
@@ -85,6 +120,7 @@ class Variables(dict):
         return {'alfredworkflow': o}
 
     def __unicode__(self):
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
         """Convert to ``alfredworkflow`` JSON object.
 
         Returns:
@@ -92,6 +128,15 @@ class Variables(dict):
 
         """
         if not self and not self.config:
+<<<<<<< HEAD
+            if not self.arg:
+                return ""
+            if isinstance(self.arg, str):
+                return self.arg
+
+        return json.dumps(self.obj)
+
+=======
             if self.arg:
                 return self.arg
             else:
@@ -108,6 +153,7 @@ class Variables(dict):
         """
         return unicode(self).encode('utf-8')
 
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
 class Modifier(object):
     """Modify :class:`Item3` arg/icon/variables when modifier key is pressed.
@@ -149,8 +195,14 @@ class Modifier(object):
 
     """
 
+<<<<<<< HEAD
+    def __init__(
+        self, key, subtitle=None, arg=None, valid=None, icon=None, icontype=None
+    ):
+=======
     def __init__(self, key, subtitle=None, arg=None, valid=None, icon=None,
                  icontype=None):
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
         """Create a new :class:`Modifier`.
 
         Don't use this class directly (as it won't be associated with any
@@ -212,6 +264,25 @@ class Modifier(object):
         o = {}
 
         if self.subtitle is not None:
+<<<<<<< HEAD
+            o["subtitle"] = self.subtitle
+
+        if self.arg is not None:
+            o["arg"] = self.arg
+
+        if self.valid is not None:
+            o["valid"] = self.valid
+
+        if self.variables:
+            o["variables"] = self.variables
+
+        if self.config:
+            o["config"] = self.config
+
+        icon = self._icon()
+        if icon:
+            o["icon"] = icon
+=======
             o['subtitle'] = self.subtitle
 
         if self.arg is not None:
@@ -229,6 +300,7 @@ class Modifier(object):
         icon = self._icon()
         if icon:
             o['icon'] = icon
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
         return o
 
@@ -241,10 +313,17 @@ class Modifier(object):
         """
         icon = {}
         if self.icon is not None:
+<<<<<<< HEAD
+            icon["path"] = self.icon
+
+        if self.icontype is not None:
+            icon["type"] = self.icontype
+=======
             icon['path'] = self.icon
 
         if self.icontype is not None:
             icon['type'] = self.icontype
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
         return icon
 
@@ -261,9 +340,28 @@ class Item3(object):
 
     """
 
+<<<<<<< HEAD
+    def __init__(
+        self,
+        title,
+        subtitle="",
+        arg=None,
+        autocomplete=None,
+        match=None,
+        valid=False,
+        uid=None,
+        icon=None,
+        icontype=None,
+        type=None,
+        largetext=None,
+        copytext=None,
+        quicklookurl=None,
+    ):
+=======
     def __init__(self, title, subtitle='', arg=None, autocomplete=None,
                  match=None, valid=False, uid=None, icon=None, icontype=None,
                  type=None, largetext=None, copytext=None, quicklookurl=None):
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
         """Create a new :class:`Item3` object.
 
         Use same arguments as for
@@ -314,8 +412,14 @@ class Item3(object):
         """
         return self.variables.get(name, default)
 
+<<<<<<< HEAD
+    def add_modifier(
+        self, key, subtitle=None, arg=None, valid=None, icon=None, icontype=None
+    ):
+=======
     def add_modifier(self, key, subtitle=None, arg=None, valid=None, icon=None,
                      icontype=None):
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
         """Add alternative values for a modifier key.
 
         Args:
@@ -328,6 +432,12 @@ class Item3(object):
                 :meth:`Workflow.add_item() <workflow.Workflow.add_item>`
                 for valid values.
 
+<<<<<<< HEAD
+        In Alfred 4.1+ and Alfred-Workflow 1.40+, ``arg`` may also be a
+        :class:`list` or :class:`tuple`.
+
+=======
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
         Returns:
             Modifier: Configured :class:`Modifier`.
 
@@ -350,6 +460,34 @@ class Item3(object):
 
         """
         # Required values
+<<<<<<< HEAD
+        o = {"title": self.title, "subtitle": self.subtitle, "valid": self.valid}
+
+        # Optional values
+        if self.arg is not None:
+            o["arg"] = self.arg
+
+        if self.autocomplete is not None:
+            o["autocomplete"] = self.autocomplete
+
+        if self.match is not None:
+            o["match"] = self.match
+
+        if self.uid is not None:
+            o["uid"] = self.uid
+
+        if self.type is not None:
+            o["type"] = self.type
+
+        if self.quicklookurl is not None:
+            o["quicklookurl"] = self.quicklookurl
+
+        if self.variables:
+            o["variables"] = self.variables
+
+        if self.config:
+            o["config"] = self.config
+=======
         o = {
             'title': self.title,
             'subtitle': self.subtitle,
@@ -380,20 +518,33 @@ class Item3(object):
 
         if self.config:
             o['config'] = self.config
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
         # Largetype and copytext
         text = self._text()
         if text:
+<<<<<<< HEAD
+            o["text"] = text
+
+        icon = self._icon()
+        if icon:
+            o["icon"] = icon
+=======
             o['text'] = text
 
         icon = self._icon()
         if icon:
             o['icon'] = icon
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
         # Modifiers
         mods = self._modifiers()
         if mods:
+<<<<<<< HEAD
+            o["mods"] = mods
+=======
             o['mods'] = mods
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
         return o
 
@@ -406,10 +557,17 @@ class Item3(object):
         """
         icon = {}
         if self.icon is not None:
+<<<<<<< HEAD
+            icon["path"] = self.icon
+
+        if self.icontype is not None:
+            icon["type"] = self.icontype
+=======
             icon['path'] = self.icon
 
         if self.icontype is not None:
             icon['type'] = self.icontype
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
         return icon
 
@@ -422,10 +580,17 @@ class Item3(object):
         """
         text = {}
         if self.largetext is not None:
+<<<<<<< HEAD
+            text["largetype"] = self.largetext
+
+        if self.copytext is not None:
+            text["copy"] = self.copytext
+=======
             text['largetype'] = self.largetext
 
         if self.copytext is not None:
             text['copy'] = self.copytext
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
         return text
 
@@ -438,7 +603,11 @@ class Item3(object):
         """
         if self.modifiers:
             mods = {}
+<<<<<<< HEAD
+            for k, mod in list(self.modifiers.items()):
+=======
             for k, mod in self.modifiers.items():
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
                 mods[k] = mod.obj
 
             return mods
@@ -470,25 +639,45 @@ class Workflow3(Workflow):
         self.variables = {}
         self._rerun = 0
         # Get session ID from environment if present
+<<<<<<< HEAD
+        self._session_id = os.getenv("_WF_SESSION_ID") or None
+        if self._session_id:
+            self.setvar("_WF_SESSION_ID", self._session_id)
+=======
         self._session_id = os.getenv('_WF_SESSION_ID') or None
         if self._session_id:
             self.setvar('_WF_SESSION_ID', self._session_id)
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
     @property
     def _default_cachedir(self):
         """Alfred 4's default cache directory."""
         return os.path.join(
             os.path.expanduser(
+<<<<<<< HEAD
+                "~/Library/Caches/com.runningwithcrayons.Alfred/" "Workflow Data/"
+            ),
+            self.bundleid,
+        )
+=======
                 '~/Library/Caches/com.runningwithcrayons.Alfred/'
                 'Workflow Data/'),
             self.bundleid)
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
     @property
     def _default_datadir(self):
         """Alfred 4's default data directory."""
+<<<<<<< HEAD
+        return os.path.join(
+            os.path.expanduser("~/Library/Application Support/Alfred/Workflow Data/"),
+            self.bundleid,
+        )
+=======
         return os.path.join(os.path.expanduser(
             '~/Library/Application Support/Alfred/Workflow Data/'),
             self.bundleid)
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
     @property
     def rerun(self):
@@ -517,8 +706,14 @@ class Workflow3(Workflow):
         """
         if not self._session_id:
             from uuid import uuid4
+<<<<<<< HEAD
+
+            self._session_id = uuid4().hex
+            self.setvar("_WF_SESSION_ID", self._session_id)
+=======
             self._session_id = uuid4().hex
             self.setvar('_WF_SESSION_ID', self._session_id)
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
         return self._session_id
 
@@ -541,9 +736,17 @@ class Workflow3(Workflow):
         self.variables[name] = value
         if persist:
             from .util import set_config
+<<<<<<< HEAD
+
+            set_config(name, value, self.bundleid)
+            self.logger.debug(
+                "saved variable %r with value %r to info.plist", name, value
+            )
+=======
             set_config(name, value, self.bundleid)
             self.logger.debug('saved variable %r with value %r to info.plist',
                               name, value)
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
     def getvar(self, name, default=None):
         """Return value of workflow variable for ``name`` or ``default``.
@@ -558,9 +761,28 @@ class Workflow3(Workflow):
         """
         return self.variables.get(name, default)
 
+<<<<<<< HEAD
+    def add_item(
+        self,
+        title,
+        subtitle="",
+        arg=None,
+        autocomplete=None,
+        valid=False,
+        uid=None,
+        icon=None,
+        icontype=None,
+        type=None,
+        largetext=None,
+        copytext=None,
+        quicklookurl=None,
+        match=None,
+    ):
+=======
     def add_item(self, title, subtitle='', arg=None, autocomplete=None,
                  valid=False, uid=None, icon=None, icontype=None, type=None,
                  largetext=None, copytext=None, quicklookurl=None, match=None):
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
         """Add an item to be output to Alfred.
 
         Args:
@@ -568,6 +790,12 @@ class Workflow3(Workflow):
                 turned on for your Script Filter, Alfred (version 3.5 and
                 above) will filter against this field, not ``title``.
 
+<<<<<<< HEAD
+        In Alfred 4.1+ and Alfred-Workflow 1.40+, ``arg`` may also be a
+        :class:`list` or :class:`tuple`.
+
+=======
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
         See :meth:`Workflow.add_item() <workflow.Workflow.add_item>` for
         the main documentation and other parameters.
 
@@ -579,9 +807,27 @@ class Workflow3(Workflow):
             Item3: Alfred feedback item.
 
         """
+<<<<<<< HEAD
+        item = self.item_class(
+            title,
+            subtitle,
+            arg,
+            autocomplete,
+            match,
+            valid,
+            uid,
+            icon,
+            icontype,
+            type,
+            largetext,
+            copytext,
+            quicklookurl,
+        )
+=======
         item = self.item_class(title, subtitle, arg, autocomplete,
                                match, valid, uid, icon, icontype, type,
                                largetext, copytext, quicklookurl)
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
         # Add variables to child item
         item.variables.update(self.variables)
@@ -592,7 +838,11 @@ class Workflow3(Workflow):
     @property
     def _session_prefix(self):
         """Filename prefix for current session."""
+<<<<<<< HEAD
+        return "_wfsess-{0}-".format(self.session_id)
+=======
         return '_wfsess-{0}-'.format(self.session_id)
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
     def _mk_session_name(self, name):
         """New cache name/key based on session ID."""
@@ -662,11 +912,21 @@ class Workflow3(Workflow):
                 current session.
 
         """
+<<<<<<< HEAD
+
+        def _is_session_file(filename):
+            if current:
+                return filename.startswith("_wfsess-")
+            return filename.startswith("_wfsess-") and not filename.startswith(
+                self._session_prefix
+            )
+=======
         def _is_session_file(filename):
             if current:
                 return filename.startswith('_wfsess-')
             return filename.startswith('_wfsess-') \
                 and not filename.startswith(self._session_prefix)
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
 
         self.clear_cache(_is_session_file)
 
@@ -682,6 +942,16 @@ class Workflow3(Workflow):
         for item in self._items:
             items.append(item.obj)
 
+<<<<<<< HEAD
+        o = {"items": items}
+        if self.variables:
+            o["variables"] = self.variables
+        if self.rerun:
+            o["rerun"] = self.rerun
+        return o
+
+    def warn_empty(self, title, subtitle="", icon=None):
+=======
         o = {'items': items}
         if self.variables:
             o['variables'] = self.variables
@@ -690,6 +960,7 @@ class Workflow3(Workflow):
         return o
 
     def warn_empty(self, title, subtitle=u'', icon=None):
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
         """Add a warning to feedback if there are no items.
 
         .. versionadded:: 1.31
@@ -717,5 +988,12 @@ class Workflow3(Workflow):
 
     def send_feedback(self):
         """Print stored items to console/Alfred as JSON."""
+<<<<<<< HEAD
+        if self.debugging:
+            json.dump(self.obj, sys.stdout, indent=2, separators=(",", ": "))
+        else:
+            json.dump(self.obj, sys.stdout)
+=======
         json.dump(self.obj, sys.stdout)
+>>>>>>> 62b1f663a30cba5a4712a37c2c375cf8ad81cb4a
         sys.stdout.flush()
