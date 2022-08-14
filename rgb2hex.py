@@ -40,7 +40,7 @@ def generate_icon(r, g, b):
     p = [(r,g,b, r,g,b, r,g,b),
          (r,g,b, r,g,b, r,g,b)]
     f = open(filename, 'wb')
-    w = png.Writer(3, 2)
+    w = png.Writer(3, 2, greyscale=False)
     w.write(f, p)
     f.close()
 
