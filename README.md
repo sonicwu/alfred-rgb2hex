@@ -1,5 +1,5 @@
 # alfred-rgb2hex
-Alfred workflow to convert RGB values of a color to a hexadecimal string, and copy the result to clipboard.
+Alfred workflow to convert RGB values of color to hexadecimal string and vice vesa, the result will be copied into clipboard.
 
 ## Download
 
@@ -7,14 +7,20 @@ You can download the workflow file from the [releases](../../releases) page.
 
 ## Example
 
-### the input separated by whitespaces
+### the rgb input separated by whitespaces
 
-![](https://raw.githubusercontent.com/sonicwu/alfred-rgb2hex/master/screenshots/screenshot_0.png)
+![](https://raw.githubusercontent.com/sonicwu/alfred-rgb2hex/master/screenshots/rgb_input_with_comma.png)
 
-### the input separated by commas
+### the rgb input separated by commas
 
-![](https://raw.githubusercontent.com/sonicwu/alfred-rgb2hex/master/screenshots/screenshot_1.png)
+![](https://raw.githubusercontent.com/sonicwu/alfred-rgb2hex/master/screenshots/rgb_input_with_whitespace.png)
+
+### the hex input
+
+![](https://raw.githubusercontent.com/sonicwu/alfred-rgb2hex/master/screenshots/hex_input.png)
 
 ### the invalid input
 
-![](https://raw.githubusercontent.com/sonicwu/alfred-rgb2hex/master/screenshots/screenshot_2.png)
+![](https://raw.githubusercontent.com/sonicwu/alfred-rgb2hex/master/screenshots/invalid_rgb_input.png)
+
+![](https://raw.githubusercontent.com/sonicwu/alfred-rgb2hex/master/screenshots/invalid_hex_input.png)
